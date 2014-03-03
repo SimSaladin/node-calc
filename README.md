@@ -59,6 +59,21 @@ hcalc: import/export csv (formulas or with values!)    | n
 
 See also activity_log.md
 
+### UI
+
+Main UI components:
+
+- info bar at top
+   * title of current sheet
+   * actions: export, import
+   * list of users
+- Sheet view
+   * Static row and column labels
+   * Dynamic user cursors
+- Changelog
+
+UI sketch below:
+
 ![UI design sketch](ui_design.jpg)
 
 Technical details

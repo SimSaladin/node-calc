@@ -26,8 +26,12 @@ module.exports = function (grunt) {
     },
 
     express: {
-      hcalcServer: {
-        server: 'server/index.js'
+      myServer: {
+        options: {
+          server: require('path').resolve('./server/index.js'),
+          livereload: true,
+          serverreload: true
+        }
       }
     },
 
@@ -361,7 +365,7 @@ module.exports = function (grunt) {
 
   grunt.loadNpmTasks('grunt-express');
 
-  grunt.registerTask('default', ['express']);
+  grunt.registerTask('myServer', ['express', 'express-keepalive']);
 
   grunt.registerTask('serve', function (target) {
     if (target === 'dist') {

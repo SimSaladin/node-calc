@@ -47,12 +47,15 @@ Development Schedule & Tasks
 Task | Completed?
 --- | ---
 Setup necessary NodeJS frameworks                      | Done
-Spreadsheet column rendering in browser                | n
+Spreadsheet column rendering in browser                | Started
+Spreadsheet editing: the cursor, text input            | n
+Concurrent edits: updates from users' edits            | n
 Import csv's from the web interface                    | n
 Export csv from browser (with formulas or with values) | n
 Design the keyboard navigation                         | n
-Setup (socket.io?) multiuser collaborative stuff       | Started
+Setup (socket.io?) multiuser collaborative stuff       | Done
 Write install instructions                             | Started
+Setup in heroku or somewhere                           | n
 hcalc: Extend and document the DSL                     | n
 hcalc: Upload to hackage                               | n
 hcalc: import/export csv (formulas or with values!)    | n
@@ -83,7 +86,12 @@ Technical details
 - Server-side app including real-time communication between server and clients **express.io**
 
 
-### Files of interest
-
+### Files of interest 
 **server/index.js** The node app
 
+
+-----
+
+**Disclaimer:** *I think I had absolutely no idea what I was actually doing 99%
+of the time I spent on this. In my opinion the architecture is extremely crappy
+and illogical. But then again, I am no JS expert.*

@@ -5,7 +5,7 @@ node-calc
 [hcalc](https://github.com/SimSaladin/hcalc).
 
 
-Features
+Planned Features
 --------
 
 - Import and export csv files
@@ -16,6 +16,19 @@ Features
    * Numerals
    * Simple formulas whose value depend on (relative) numeral cells
 
-
 Install
 -------
+
+Development Schedule & Tasks
+-----------------
+
+Task | Completed?
+--- | ---
+Setup necessary NodeJS frameworks, npm? | n
+Import csv's from the web interface | n
+Spreadsheet column rendering in browser | n
+Design the keyboard navigation | n
+Setup (socket.io?) multiuser collaborative stuff | n
+hcalc: import and export csv (with formulas or with values!) | n
+Export csv from browser (with formulas or with values) | n
+

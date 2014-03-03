@@ -2,5 +2,6 @@
 
 Time | Activity
 ---- | ---
-11-12 | Undusting and refactoring the hcalc backend.
-12-   | Write out tasks for the project
+11 - 12 | Undusting and refactoring the hcalc backend.
+12 - 14 | Write out tasks for the project. Cabalize hcalc (and refactor more).
+14:45 - | Set up framework

@@ -1,27 +1,36 @@
 <div class="header">
-  <ul class="nav nav-pills pull-right">
-     <li><a>User 1</a></li>
-  </ul>
-  <h3 class="text-muted pull-left">A test sheet</h3>
+  <div class="pull-right">
+     <span>Me ({{me.name}})</span>
+     <i>Others: </i>
+     <span ng-repeat="user in otherUsers">
+        {{user.name}}
+     </span>
+  </div>
+  <h3 class="text-muted pull-left">
+     <select class="form-control">
+        <option>test sheet</option>
+      </select>
+   </h3>
   <ul class="nav nav-pills">
     <li><a ng-href="#">Export CSV</a></li>
-    <!-- <li><a ng-href="#">Import CSV</a></li>
-    -->
+    <li><a ng-href="#">Import CSV</a></li>
   </ul>
 </div>
 
-<table id="sheet">
-   <tr>
-      <th class="header" ng-repeat="c in ['A', 'B', 'C', 'D']">
-         {{c}}
-      </th>
-   </tr>
-   <tr ng-repeat="col in columns">
-      <td class="column" ng-repeat="cell in col">
-         {{cell}}
-      </td>
-   </tr>
-</table>
+<div class="table-responsive">
+   <table id="sheet" class="table table-bordered">
+      <tr>
+         <th class="header" ng-repeat="c in ['A', 'B', 'C', 'D']">
+            {{c}}
+         </th>
+      </tr>
+      <tr ng-repeat="col in columns">
+         <td class="column" ng-repeat="cell in col">
+            {{cell}}
+         </td>
+      </tr>
+   </table>
+</div>
 
 <div class="footer">
   <p>node calc

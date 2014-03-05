@@ -10,3 +10,16 @@ Time | Activity
 20 - 21    | express.io finally works with grunt. Implementing UI
 21 - 22    | getting into angularjs. some rudimentary ui elements
 22 - 22:10 | wire up socket.io with angularjs
+
+
+
+# Tuesday (4.3)
+
+zzzzzzzzzzzzz
+
+
+# Wednesday (5.3)
+
+Time | Activity
+---- | ---
+2 - 4| Tunking UI and socket.io: connected users and their properties propagated to server and clients. 

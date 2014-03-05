@@ -29,6 +29,7 @@ module.exports = function (grunt) {
       myServer: {
         options: {
           server: require('path').resolve('./server/index.js'),
+          bases: 'server',
           livereload: true,
           serverreload: true
         }
@@ -365,7 +366,7 @@ module.exports = function (grunt) {
 
   grunt.loadNpmTasks('grunt-express');
 
-  grunt.registerTask('myServer', ['express', 'express-keepalive']);
+  grunt.registerTask('myServer', ['express']);
 
   grunt.registerTask('serve', function (target) {
     if (target === 'dist') {

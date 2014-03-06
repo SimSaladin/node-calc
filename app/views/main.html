@@ -1,7 +1,7 @@
 <div class="header">
   <form class="form-inline pull-right" role="form">
     <div class="form-group">
-      <label>Switch sheet</label>
+      <label>Switch sheet {{ sheets.length }} </label>
       <select class="form-control" ng-model="nextSheet" ng-change="setSheet()"
         ng-options="key as key for (key, value) in sheets">
         <option value="">-- Choose sheet --</option>
@@ -22,7 +22,7 @@
   </div>
 
   <div ng-switch-default>
-    <div class="pull-right" ng-switch on="otherUsers.length">
+    <div id="userListing" class="pull-right" ng-switch on="otherUsers.length">
       <i ng-switch-when="0" class="text-muted">You are the only viewer.</i>
       <div ng-switch-default>
         <button class="btn" ng-repeat="user in otherUsers">
@@ -31,8 +31,8 @@
       </div>
     </div>
     <p>
-      <button class="btn btn-warning">Export</button>
-      <button class="btn btn-success">Export values</button>
+      <button class="btn btn-xs btn-primary" ng-click="saveAndCalculate()">Save &amp; Calculate</button>
+      <button class="btn btn-xs btn-default" ng-click="save()">Save only</button>
     </p>
   </div>
 </div>
@@ -41,34 +41,40 @@
   <table id="sheet" class="table table-bordered">
     <tr>
       <th ng-repeat="(col, header) in currentSheet.values[0] track by col"
-        ng-mouseenter="updateCursor(0, col)"
-        ng-class="{active : pos.col == col || pos.row == 0 }"
-        >
-        <input ng-model="currentSheet.values[0][col]"
-          ng-change="updateCurrentCell()" value="{{header}}" />
+        ng-mouseenter="updateCursor(0, col)" ng-class="{active : pos.col == col || pos.row == 0 }">
+        <input ng-model="currentSheet.values[0][col]" ng-change="updateCurrentCell()" />
+        <span ng-repeat="user in otherUsers | filter:{ pos.col: col, pos.row: 0}"
+          class="user">{{user.name}}</span>
       </th>
     </tr>
     <tr ng-repeat="(row, column) in currentSheet.values.slice(1) track by row">
       <td ng-repeat="(col, cell) in column track by col"
-        ng-mouseenter="updateCursor(row+1, col)"
-        ng-class="{active : pos.col == col || pos.row == row+1 }">
-        <input ng-model="currentSheet.values[row+1][col]"
-          ng-change="updateCurrentCell()"/>
+        ng-mouseenter="updateCursor(row+1, col)" ng-class="{active : pos.col == col || pos.row == row+1 }">
+        <input ng-model="currentSheet.values[row+1][col]" ng-change="updateCurrentCell()"/>
+        <span ng-repeat="user in otherUsers | filter:{ pos.col: col, pos.row: row+1}"
+          class="user">{{user.name}}</span>
       </td>
     </tr>
   </table>
-  <style>
-    .hover {
-      background:red;
-    }
-  </style>
+  <i>Columns: A, B, C... Rows: 1, 2, 3, ...</i>
 </div>
 
+<div class="pull-right">
+  <a class="btn btn-xs btn-default" ng-click="exportResults()">Result</a>
+  <a class="btn btn-xs btn-default" ng-click="export()">CSV</a>
+</div>
+<h4 class="text-muted">Result</h4>
+<pre>{{result}}</pre>
+
 <h4 class="text-muted">Log</h4>
-<pre>
+<pre style="height:8em;overflow-y:auto">
 <span ng-repeat="(index, n) in notifications track by index">{{n + '\n'}}</span>
 </pre>
 
 <div class="footer">
+  <div class="pull-right">
+    Working as {{me.name}}
+  </div>
   <p>node calc
+
 </div>

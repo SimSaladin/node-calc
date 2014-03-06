@@ -89,3 +89,17 @@ body {
         border-bottom: 0;
     }
 }
+
+.hover {
+   background:red;
+}
+.user {
+   background:rgb(87,255,235);
+   padding:0 0.2em;
+   float:right;
+   font-size:70%;
+}
+
+#userListing button {
+   margin-left:0.5em;
+}

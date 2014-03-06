@@ -6,9 +6,13 @@ nodeCalcApp.controller('MainCtrl', function ($scope, socket, $upload) {
   $scope.currentSheetName = "";
   $scope.currentSheet = {};
   $scope.otherUsers = [];
-  $scope.me = "?";
   $scope.notifications = [];
-  $scope.intermediate = { cell : undefined };
+  $scope.result = "";
+
+  function info(str) {
+    $scope.notifications.push(str);
+  }
+  socket.on('notification', info);
 
   // Fileupload
   $scope.uploadFile = function ($files) {
@@ -17,10 +21,46 @@ nodeCalcApp.controller('MainCtrl', function ($scope, socket, $upload) {
       url: socketUrl + '/upload',
       data: {},
       file: file
-    }).progress(function(evt) {
-      console.log( parseInt(100.0 * evt.loaded / evt.total) );
-    }).success(function(data, status, headers, config) {
-      console.log(data);
+    }).success(function(){ info("upload complete") });
+    // XXX: for some reason the success callback is not launched
+  }
+
+  $scope.getCurrentCSV = function(){
+    return $.csv.fromArrays($scope.currentSheet.values);
+  }
+
+  $scope.download = function(type, data, append) {
+    var a = document.createElement('a');
+    a.href = 'data:' + type + ',' + data.replace(/\n/g, '%0A');
+    a.target = '_blank';
+    a.download = $scope.currentSheetName + (append || '');
+    document.body.appendChild(a);
+    a.click();
+  }
+
+  $scope.export = function() {
+    $scope.download('attachment/csv', $scope.getCurrentCSV());
+  }
+
+  $scope.exportResults = function() {
+    $scope.download('attachment/text', $scope.results, '.txt');
+  }
+
+  $scope.save = function(data, callback) {
+    if (!callback) callback = function(){};
+    if (!data) data = {};
+    data.csv = $scope.getCurrentCSV();
+    $.post(socketUrl + '/save/' + $scope.currentSheetName, data, callback);
+  }
+
+  $scope.saveAndCalculate = function() {
+    $scope.save({}, function(){
+      $.get(socketUrl + '/calculate/' + $scope.currentSheetName, function(data) {
+        console.log("got results");
+        console.log(data);
+        $scope.result = data;
+        $scope.$apply();
+      });
     });
   }
 
@@ -62,16 +102,19 @@ nodeCalcApp.controller('MainCtrl', function ($scope, socket, $upload) {
     $scope.otherUsers = users.filter(function(x){return x.name!=$scope.me.name});
   });
 
+  socket.on('changeuser', function (props) {
+    var uid, user;
+    for (uid in $scope.otherUsers) {
+      user = $scope.otherUsers[uid];
+      if (user.name == props.name) {
+        info(user.name + " -> (" + props.pos.col + ', ' + props.pos.row + ')');
+        user.pos = props.pos;
+      }
+    }
+  })
+
   socket.on('sheet:sheet_listing', function (sheets) {
     $scope.sheets = sheets;
-  });
-
-  socket.on('debug', function(data) {
-    $scope.notifications.push("DEBUG: " + notif);
-  });
-
-  socket.on('notification', function(notif) {
-    $scope.notifications.push(notif);
   });
 
   socket.emit('joined');

@@ -32,4 +32,12 @@ Time | Activity
 1330 - 1530 | File upload and little UI elements (still trying to wrap my head around angular).
 1600 - 1730 | CSV -> socket.io -> browser. Table rendering.
 1800 - 1900 | Making the sheet view reactive (angular sucks.)
-1900 - 2000 | Changes to sheets now propagate to others realtime. (had to switch to jquery CSV parser as node didn't have a simple enough parser...)
+1900 - 2000 | Changes to sheets now propagate to others realtime. (had to switch to jquery CSV parser as node didnt have a simple enough parser...)
+2140 - 2240 | Cursor tracking
+2300 - 2400 | fixed upload and a few little bugs, implemented export
+
+# Friday (6.3)
+
+Time | Activity
+---- | ---
+0000 - 0100 | Hacked csvs to hcalc in nodejs (via spawn, hcalc as external program). Results are now shown.

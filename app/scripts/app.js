@@ -3,7 +3,7 @@
 var socketUrl = 'http://127.0.0.1:3000';
 
 var app = angular.module('nodeCalcApp',
-    [ 'ngCookies', 'ngResource', 'ngSanitize', 'ngRoute' ]);
+    [ 'angularFileUpload', 'ngCookies', 'ngResource', 'ngSanitize', 'ngRoute' ]);
 
 app.factory('socket', function ($rootScope) {
   var socket = io.connect(socketUrl);

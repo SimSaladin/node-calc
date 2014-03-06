@@ -1,36 +1,53 @@
 <div class="header">
-  <div class="pull-right">
-     <span>Me ({{me.name}})</span>
-     <i>Others: </i>
-     <span ng-repeat="user in otherUsers">
-        {{user.name}}
-     </span>
-  </div>
-  <h3 class="text-muted pull-left">
-     <select class="form-control">
-        <option>test sheet</option>
+  <form class="form-inline pull-right" role="form">
+    <div class="form-group">
+      <label>Switch sheet</label>
+      <select class="form-control" ng-model="nextSheet" ng-change="setSheet()"
+        ng-options="key as key for (key, value) in sheets">
+        <option value="">-- Choose sheet --</option>
       </select>
-   </h3>
-  <ul class="nav nav-pills">
-    <li><a ng-href="#">Export CSV</a></li>
-    <li><a ng-href="#">Import CSV</a></li>
-  </ul>
+    </div>
+    <div class="form-group">
+      <label>Import a CSV sheet</label>
+      <br>
+      <input type="file" ng-file-select="uploadFile($files)">
+    </div>
+  </form>
+  <h3 class="text-muted">node-calc</h3>
+</div>
+
+<div ng-switch on="currentSheetName">
+  <div ng-switch-when="">
+    <p>No sheet selected. Select one above, or import your own.</p>
+  </div>
+
+  <div ng-switch-default>
+    <div class="pull-right" ng-switch on="otherUsers.length">
+      <i ng-switch-when="0" class="text-muted">You are the only viewer.</i>
+      <button ng-switch-default class="btn" ng-repeat="user in otherUsers">{{user.name}}</button>
+    </div>
+    <p>
+      <button class="btn btn-warning">Export</button>
+      <button class="btn btn-success">Export values</button>
+    </p>
+  </div>
 </div>
 
 <div class="table-responsive">
-   <table id="sheet" class="table table-bordered">
-      <tr>
-         <th class="header" ng-repeat="c in ['A', 'B', 'C', 'D']">
-            {{c}}
-         </th>
-      </tr>
-      <tr ng-repeat="col in columns">
-         <td class="column" ng-repeat="cell in col">
-            {{cell}}
-         </td>
-      </tr>
-   </table>
+  <table id="sheet" class="table table-bordered">
+    <tr>
+      <th class="header" ng-repeat="c in currentSheet.content.csvRows[0]">{{c}}</th>
+    </tr>
+    <tr ng-repeat="col in currentSheet.content.csvRows.slice(1)">
+      <td class="column" ng-repeat="cell in col">{{cell}}</td>
+    </tr>
+  </table>
 </div>
+
+<h4 class="text-muted">Log</h4>
+<pre>
+  <span ng-repeat="n in notifications">{{n}}</span>
+</pre>
 
 <div class="footer">
   <p>node calc

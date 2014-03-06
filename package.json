@@ -39,7 +39,8 @@
     "karma-phantomjs-launcher": "~0.1.2",
     "karma": "~0.10.9",
     "grunt-karma": "~0.6.2",
-    "grunt-express": "~1.2.1"
+    "grunt-express": "~1.2.1",
+    "csvtojson": "0.1.7"
   },
   "engines": {
     "node": ">=0.8.0"

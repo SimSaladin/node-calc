@@ -23,3 +23,11 @@ zzzzzzzzzzzzz
 Time | Activity
 ---- | ---
 2 - 4| Tunking UI and socket.io: connected users and their properties propagated to server and clients. 
+
+
+# Thursday (6.3)
+
+Time | Activity
+---- | ---
+1330 - 1530 | File upload and little UI elements (still trying to wrap my head around angular).
+1600 - 1730 | CSV -> socket.io -> browser. Table rendering.

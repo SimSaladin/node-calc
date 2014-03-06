@@ -76,11 +76,9 @@ function emitSheetListing() {
 }
 
 function openCSV(sheetName) {
-  var converter = new Converter();
-  converter.on("end_parsed", function(obj) {
-    sheets[sheetName].content = obj;
+  fs.readFile('sheets/' + sheetName, {encoding: 'utf-8'}, function(err, data) {
+    sheets[sheetName].csv = data;
   });
-  converter.from('sheets/' + sheetName);
 }
 
 // read sheets
@@ -126,6 +124,11 @@ app.io.route('sheet', {
   fetch: function(req) {
     req.io.emit('sheet:rewrite_sheet', testSheet);
   }
+});
+
+app.io.route('changevalue', function(req) {
+  req.io.emit('notification', 'change noted');
+  req.io.broadcast('changevalue', req.data);
 });
 
 module.exports = app;

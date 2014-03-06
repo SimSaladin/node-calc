@@ -31,3 +31,5 @@ Time | Activity
 ---- | ---
 1330 - 1530 | File upload and little UI elements (still trying to wrap my head around angular).
 1600 - 1730 | CSV -> socket.io -> browser. Table rendering.
+1800 - 1900 | Making the sheet view reactive (angular sucks.)
+1900 - 2000 | Changes to sheets now propagate to others realtime. (had to switch to jquery CSV parser as node didn't have a simple enough parser...)

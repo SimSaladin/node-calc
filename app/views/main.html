@@ -24,7 +24,11 @@
   <div ng-switch-default>
     <div class="pull-right" ng-switch on="otherUsers.length">
       <i ng-switch-when="0" class="text-muted">You are the only viewer.</i>
-      <button ng-switch-default class="btn" ng-repeat="user in otherUsers">{{user.name}}</button>
+      <div ng-switch-default>
+        <button class="btn" ng-repeat="user in otherUsers">
+          {{user.name}}
+        </button>
+      </div>
     </div>
     <p>
       <button class="btn btn-warning">Export</button>
@@ -36,17 +40,33 @@
 <div class="table-responsive">
   <table id="sheet" class="table table-bordered">
     <tr>
-      <th class="header" ng-repeat="c in currentSheet.content.csvRows[0]">{{c}}</th>
+      <th ng-repeat="(col, header) in currentSheet.values[0] track by col"
+        ng-mouseenter="updateCursor(0, col)"
+        ng-class="{active : pos.col == col || pos.row == 0 }"
+        >
+        <input ng-model="currentSheet.values[0][col]"
+          ng-change="updateCurrentCell()" value="{{header}}" />
+      </th>
     </tr>
-    <tr ng-repeat="col in currentSheet.content.csvRows.slice(1)">
-      <td class="column" ng-repeat="cell in col">{{cell}}</td>
+    <tr ng-repeat="(row, column) in currentSheet.values.slice(1) track by row">
+      <td ng-repeat="(col, cell) in column track by col"
+        ng-mouseenter="updateCursor(row+1, col)"
+        ng-class="{active : pos.col == col || pos.row == row+1 }">
+        <input ng-model="currentSheet.values[row+1][col]"
+          ng-change="updateCurrentCell()"/>
+      </td>
     </tr>
   </table>
+  <style>
+    .hover {
+      background:red;
+    }
+  </style>
 </div>
 
 <h4 class="text-muted">Log</h4>
 <pre>
-  <span ng-repeat="n in notifications">{{n}}</span>
+<span ng-repeat="(index, n) in notifications track by index">{{n + '\n'}}</span>
 </pre>
 
 <div class="footer">

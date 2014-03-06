@@ -8,6 +8,7 @@ nodeCalcApp.controller('MainCtrl', function ($scope, socket, $upload) {
   $scope.otherUsers = [];
   $scope.me = "?";
   $scope.notifications = [];
+  $scope.intermediate = { cell : undefined };
 
   // Fileupload
   $scope.uploadFile = function ($files) {
@@ -30,10 +31,27 @@ nodeCalcApp.controller('MainCtrl', function ($scope, socket, $upload) {
     }
   }
 
+  $scope.updateCursor = function(row, col) {
+    var pos = { row : row, col : col };
+    $scope.pos = pos;
+    socket.emit("position", pos);
+  }
+
+  $scope.updateCurrentCell = function() {
+    var pos = $scope.pos;
+    var val = $scope.currentSheet.values[pos.row][pos.col];
+    socket.emit("changevalue", { pos : pos, val : val });
+  }
+
+  socket.on('changevalue', function(data) {
+    var pos = data.pos;
+    $scope.currentSheet.values[pos.row][pos.col] = data.val;
+  });
+
   socket.on('joined', function(sheet) {
-    $scope.currentSheetName = $scope.nextSheet;
+    sheet.values = $.csv.toArrays(sheet.csv);
     $scope.currentSheet = sheet;
-    console.log(sheet);
+    $scope.currentSheetName = $scope.nextSheet;
   });
 
   socket.on('me', function (me) {
@@ -48,10 +66,6 @@ nodeCalcApp.controller('MainCtrl', function ($scope, socket, $upload) {
     $scope.sheets = sheets;
   });
 
-  socket.on('sheet:new_sheet', function (sheet) {
-    $scope.sheet = sheet;
-  });
-
   socket.on('debug', function(data) {
     $scope.notifications.push("DEBUG: " + notif);
   });
@@ -61,4 +75,12 @@ nodeCalcApp.controller('MainCtrl', function ($scope, socket, $upload) {
   });
 
   socket.emit('joined');
+
+  // load sheet named first GET param key.
+  var s = window.location.href.split("?")[1];
+  if (s) {
+    $scope.nextSheet = s.split("=")[0];
+    $scope.setSheet();
+  }
+
 });

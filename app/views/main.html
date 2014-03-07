@@ -2,7 +2,7 @@
   <form class="form-inline pull-right" role="form">
     <div class="form-group">
       <label>Switch sheet {{ sheets.length }} </label>
-      <select class="form-control" ng-model="nextSheet" ng-change="setSheet()"
+      <select class="form-control input-sm" ng-model="nextSheet" ng-change="setSheet()"
         ng-options="key as key for (key, value) in sheets">
         <option value="">-- Choose sheet --</option>
       </select>
@@ -56,10 +56,12 @@
       </td>
     </tr>
   </table>
-  <i>Columns: A, B, C... Rows: 1, 2, 3, ...</i>
+  <i>Columns (A,B,C...) and rows (1,2,3,...) are relative to cell. Sum numbers:
+  $(sum A1:C1)$</i>
 </div>
 
 <div class="pull-right">
+  Download 
   <a class="btn btn-xs btn-default" ng-click="exportResults()">Result</a>
   <a class="btn btn-xs btn-default" ng-click="export()">CSV</a>
 </div>
@@ -76,5 +78,4 @@
     Working as {{me.name}}
   </div>
   <p>node calc
-
 </div>

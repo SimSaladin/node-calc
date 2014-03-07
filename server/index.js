@@ -32,7 +32,7 @@ function openCSV(sheetName, callback) {
   sheets[sheetName] = {};
   fs.readFile('sheets/' + sheetName, {encoding: 'utf-8'}, function(err, data) {
     sheets[sheetName].csv = data;
-    callback();
+    callback ? callback() : true;
   });
 }
 
@@ -89,6 +89,7 @@ app.post('/save/:fileName', function(req, res) {
     return;
   }
   fs.writeFile('sheets/' + fileName, csv, function(){
+    openCSV(fileName);
     res.send('success');
   });
 })
@@ -162,4 +163,4 @@ app.io.sockets.on('connection', function(socket) {
 });
 
 module.exports = app;
-app.listen(3000);
+//app.listen(3000);

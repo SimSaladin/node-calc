@@ -41,3 +41,5 @@ Time | Activity
 Time | Activity
 ---- | ---
 0000 - 0100 | Hacked csvs to hcalc in nodejs (via spawn, hcalc as external program). Results are now shown.
+1100 - 1120 | Hack formulas, reload csv on server on save.
+1130 - 1240 | General README documenting

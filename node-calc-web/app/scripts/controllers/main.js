@@ -4,32 +4,38 @@ var nodeCalcApp = angular.module('nodeCalcApp');
 
 nodeCalcApp.controller('MainCtrl', function ($scope, socket, $upload) {
 
-  $scope.currentSheetName = "";
-  $scope.currentSheet = {};
-  $scope.otherUsers = [];
-  $scope.notifications = [];
-  $scope.result = "";
+  $scope.currentSheetName = '';
+  $scope.currentSheet     = {};
+  $scope.otherUsers       = [];
+  $scope.notifications    = [];
+  $scope.result           = '';
 
   // Present an info block to user
-  function info(str) {
+  $scope.info = function info(str) {
     $scope.notifications.push(str);
-  }
+  };
 
   // Upload some sheet to /upload
   $scope.uploadFile = function ($files) {
+    if (!$files) {
+      return false;
+    }
     var file = $files[0];
+
     $scope.upload = $upload.upload({
-      url: socketUrl + '/upload',
+      url: socket.url + '/upload',
       data: {},
       file: file
-    }).success(function(){ info("upload complete") });
-    // XXX: for some reason the success callback is not launched
-  }
+    }).success(function(){
+      // XXX: for some reason the success callback is not launched
+      $scope.info('upload complete');
+    });
+  };
 
   // Return current CSV.
   $scope.getCurrentCSV = function(){
     return $.csv.fromArrays($scope.currentSheet.values);
-  }
+  };
 
   // Helper to launch some download link.
   $scope.download = function(type, data, append) {
@@ -39,61 +45,65 @@ nodeCalcApp.controller('MainCtrl', function ($scope, socket, $upload) {
     a.download = $scope.currentSheetName + (append || '');
     document.body.appendChild(a);
     a.click();
-  }
+  };
 
   // Export current sheet as CSV.
   $scope.export = function() {
     $scope.download('attachment/csv', $scope.getCurrentCSV());
-  }
+  };
 
   // Assign browser to download current results.
   $scope.exportResults = function() {
     $scope.download('attachment/text', $scope.results, '.txt');
-  }
+  };
 
   // Save the sheet server side.
   $scope.save = function(data, callback) {
-    if (!callback) callback = function(){};
-    if (!data) data = {};
+    if (!callback) {
+      callback = function(){};
+    }
+    if (!data) {
+      data = {};
+    }
     data.csv = $scope.getCurrentCSV();
-    $.post(socketUrl + '/save/' + $scope.currentSheetName, data, callback);
-  }
+    $.post(socket.url + '/save/' + $scope.currentSheetName, data, callback);
+  };
 
   // Calculate current values at server via hcalc.
   $scope.saveAndCalculate = function() {
     $scope.save({}, function(){
-      $.get(socketUrl + '/calculate/' + $scope.currentSheetName, function(data) {
-        console.log("got results");
+      $.get(socket.url + '/calculate/' + $scope.currentSheetName, function(data) {
+        console.log('got results');
         console.log(data);
         $scope.result = data;
         $scope.$apply();
       });
     });
-  }
+  };
 
   // When user clicks to open a sheet, we sent the "sheet:open" event to server
   // which goes on to send us the sheet join notification.
   $scope.setSheet = function (sheet) {
-    var sheet = $scope.nextSheet;
+    sheet = $scope.nextSheet;
     if ($scope.currentSheetName !== sheet) {
       socket.emit('sheet:open', sheet);
     }
-  }
+  };
 
   // Updates my current cursor position. 
   $scope.updateCursor = function(row, col) {
     var pos = { row : row, col : col };
     $scope.pos = pos;
-    socket.emit("position", pos);
-  }
+    socket.emit('position', pos);
+  };
 
   // This bound to onChange event in cells. It registers the change to the cell
   // and emits it to server, to be propagated along clients in same room.
   $scope.updateCurrentCell = function() {
     var pos = $scope.pos;
     var val = $scope.currentSheet.values[pos.row][pos.col];
-    socket.emit("changevalue", { pos : pos, val : val });
-  }
+    socket.emit('changevalue', { pos : pos, val : val });
+  };
 
   // ----------------- socket.io listeners -------
 
@@ -112,7 +122,9 @@ nodeCalcApp.controller('MainCtrl', function ($scope, socket, $upload) {
 
   // When receiving a listing of all users.
   socket.on('users:all_users', function (users) {
-    $scope.otherUsers = users.filter(function(x){return x.name!=$scope.me.name});
+    $scope.otherUsers = users.filter(function(x){
+      return x.name !== $scope.me.name;
+    });
   });
 
   // When receiving a change to some cell, apply it.
@@ -127,32 +139,30 @@ nodeCalcApp.controller('MainCtrl', function ($scope, socket, $upload) {
     var uid, user;
     for (uid in $scope.otherUsers) {
       user = $scope.otherUsers[uid];
-      if (user.name == props.name) {
-        info(user.name + " -> (" + props.pos.col + ', ' + props.pos.row + ')');
+      if (user.name === props.name) {
+        $scope.info(user.name + ' -> (' + props.pos.col + ', ' + props.pos.row + ')');
         user.pos = props.pos;
       }
     }
-  })
+  });
 
   // update the sheet listing
   socket.on('sheet:sheet_listing', function (sheets) {
     $scope.sheets = sheets;
   });
 
+  // bind socket "notification" events to info blocks
+  socket.on('notification', $scope.info);
+
   // broadcast joining to teh app
   socket.emit('joined');
 
-  // bind socket "notification" events to info blocks
-  socket.on('notification', info);
-
 
   // ------------------------ Initialization ------
-
   // load sheet named first GET param key.
-  var s = window.location.href.split("?")[1];
+  var s = window.location.href.split('?')[1];
   if (s) {
-    $scope.nextSheet = s.split("=")[0];
+    $scope.nextSheet = s.split('=')[0];
     $scope.setSheet();
   }
-
 });

@@ -11,18 +11,32 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
+      'app/bower_components/socket.io-client/dist/socket.io.js',
+      'app/bower_components/jquery/jquery.js',
       'app/bower_components/angular/angular.js',
       'app/bower_components/angular-mocks/angular-mocks.js',
       'app/bower_components/angular-resource/angular-resource.js',
       'app/bower_components/angular-cookies/angular-cookies.js',
       'app/bower_components/angular-sanitize/angular-sanitize.js',
       'app/bower_components/angular-route/angular-route.js',
-      'app/bower_components/socket.io-client/dist/socket.io.js',
+      'app/bower_components/ng-file-upload/angular-file-upload.min.js',
       'app/scripts/*.js',
       'app/scripts/**/*.js',
       'test/mock/**/*.js',
       'test/spec/**/*.js'
     ],
+
+    preprocessors: {
+      'app/scripts/*.js': 'coverage',
+      'app/scripts/**/*.js': 'coverage'
+    },
+
+    reporters: ['progress', 'coverage'],
+
+    coverageReporter: {
+      type: 'html',
+      dir: 'test/coverage'
+    },
 
     // list of files / patterns to exclude
     exclude: [],
@@ -48,7 +62,6 @@ module.exports = function(config) {
     // - PhantomJS
     // - IE (only Windows)
     browsers: ['Chrome'],
-
 
     // Continuous Integration mode
     // if true, it capture browsers, run tests and exit

@@ -1,9 +1,9 @@
 'use strict';
 
-var socketUrl = 'http://127.0.0.1:3000';
+var socketUrl = 'http://node-calc-server.herokuapp.com:80';
 
 var app = angular.module('nodeCalcApp',
-    [ 'angularFileUpload', 'ngCookies', 'ngResource', 'ngSanitize', 'ngRoute' ]);
+    [ 'angularFileUpload', 'ngRoute' ]);
 
 app.factory('socket', function ($rootScope) {
   var socket = io.connect(socketUrl);

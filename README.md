@@ -68,19 +68,36 @@ equivalent installed:
 
 Adjust the last line to your preferences. Make sure the ~/bin is in $PATH.
 
-### Running the development server
+### Running in development mode
 
-To build and run the development server via grunt on localhost, clone this repo
-and inside do:
+node-calc is split in two: backend functionality (socket.io and hcalc) in
+`node-calc-server` and web interface in `node-calc-web`.
 
+To run the backend:
+
+    cd node-calc-server
+    npm install
+    foreman start # or node server.js
+
+By default the backend listens on 3000, but $PORT takes precedence.
+
+---
+
+To build and run the web interface:
+
+    cd node-calc-web
     grunt test
     grunt serve
 
-The second command does everything for you. Even starting your browser in
-http://localhost:9000.
+The second command starts your browser in http://localhost:9000.
+
+### Production
 
 Now, **please** do not run this on a production server without proper
 sandboxing or someone **will** launch the missiles!
+
+There are Procfiles for deploying to heroku in `node-calc-{server,web}` for the
+backend and web interface, respectively.
 
 Development notes
 -----------------
@@ -129,8 +146,7 @@ Import csv's from the web interface                    | Done
 Export csv from browser (with formulas or with values) | Done
 Write install instructions                             | Started
 Setup in heroku or somewhere                           | n
-hcalc: Extend and document the DSL                     | n
-hcalc: Upload to hackage                               | n
+hcalc: Extend and document the DSL                     | (Too OT)
 hcalc: import/export csv (formulas or with values!)    | Done
 
 

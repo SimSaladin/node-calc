@@ -25,17 +25,6 @@ module.exports = function (grunt) {
       dist: 'dist'
     },
 
-    express: {
-      myServer: {
-        options: {
-          server: require('path').resolve('./server/index.js'),
-          bases: 'server',
-          livereload: true,
-          serverreload: true
-        }
-      }
-    },
-
     // Watches files for changes and runs tasks based on the changed files
     watch: {
       js: {
@@ -363,11 +352,6 @@ module.exports = function (grunt) {
     }
   });
 
-
-  grunt.loadNpmTasks('grunt-express');
-
-  grunt.registerTask('myServer', ['express']);
-
   grunt.registerTask('serve', function (target) {
     if (target === 'dist') {
       return grunt.task.run(['build', 'connect:dist:keepalive']);
@@ -379,7 +363,6 @@ module.exports = function (grunt) {
       'concurrent:server',
       'autoprefixer',
       'connect:livereload',
-      'express',
       'watch'
     ]);
   });

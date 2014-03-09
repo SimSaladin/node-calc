@@ -1,8 +1,10 @@
 var Converter = require('csvtojson').core.Converter;
-var spawn = require('child_process').spawn;
-var fs = require('fs');
-var express = require('express.io');
+var spawn     = require('child_process').spawn;
+var fs        = require('fs');
+var express   = require('express.io');
+
 var app = express().http().io();
+
 
 app.use(function(req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
@@ -12,7 +14,7 @@ app.use(function(req, res, next) {
 });
 app.use(express.bodyParser());
 
-app.io.set('origins', '*127.0.0.1*:*'); // XXX: hard-coded localhost..
+app.io.set('origins', '*:*');
 
 function dd(argument) {
   app.io.sockets.emit('notification', "DEBUG: " + argument);
@@ -162,5 +164,7 @@ app.io.sockets.on('connection', function(socket) {
   });
 });
 
-module.exports = app;
-//app.listen(3000);
+var port = Number(process.env.PORT || 3000);
+app.listen(port, function() {
+  console.log("Listening on " + port);
+});

@@ -41,8 +41,9 @@ Install
 node-calc requires these executables in path:
 
 - npm
-- grunt
 - ruby
+- grunt
+- bower
 - compass (install via `gem install compass`)
 - hcalc (see below)
 
@@ -83,11 +84,12 @@ By default the backend listens on 3000, but $PORT takes precedence.
 
 ---
 
-To build and run the web interface:
+To build the web interface:
 
     cd node-calc-web
-    grunt test
-    grunt serve
+    npm install
+
+Run tests with `grunt test`. Start devel server with `grunt serve`.
 
 The second command starts your browser in http://localhost:9000.
 

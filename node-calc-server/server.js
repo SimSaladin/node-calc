@@ -5,11 +5,14 @@ var express   = require('express.io');
 
 var app = express().http().io();
 
+fs.mkdir('sheets');
 
 app.use(function(req, res, next) {
-  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Origin', 'http://node-calc.herokuapp.com');
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  if (! req.method) {
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Content-Range, Content-Disposition, Content-Description');
+  }
   next();
 });
 app.use(express.bodyParser());
@@ -32,7 +35,8 @@ function emitSheetListing() {
 
 function openCSV(sheetName, callback) {
   sheets[sheetName] = {};
-  fs.readFile('sheets/' + sheetName, {encoding: 'utf-8'}, function(err, data) {
+
+  fs.readFile('sheets/' + sheetName, { encoding: 'utf-8' }, function(err, data) {
     sheets[sheetName].csv = data;
     callback ? callback() : true;
   });
@@ -71,15 +75,19 @@ function checkExists(sheetName) {
 }
 
 app.post('/upload', function(req, res) {
+
   var file = req.files.file;
   var newPath = "sheets/" + file.name; // XXX: escape!
+
   fs.readFile(file.path, function (err, data) {
+
     if (err) {
-      dd("Upload failed");
+      res.send("upload failed");
       return;
     }
     fs.writeFile(newPath, data, function (err) {
       openCSV(file.name, emitSheetListing);
+      res.send("upload complete");
     });
   });
 });
@@ -97,14 +105,20 @@ app.post('/save/:fileName', function(req, res) {
 })
 
 app.get('/calculate/:fileName', function(req, res) {
+
   var fileName = req.param('fileName');
+
   if ( ! checkExists(fileName) ) {
+    app.io.sockets.emit('notification', 'sheet does not exist');
     return;
   }
-  var prc = spawn('hcalc', ['sheets/' + fileName]);
+
+  var prc = spawn('./hcalc', ['sheets/' + fileName]);
   var content = "";
   var err = "";
+
   prc.stdout.setEncoding('utf8');
+
   prc.stdout.on('data', function(data) {
     content += data.toString();
   });
@@ -114,6 +128,7 @@ app.get('/calculate/:fileName', function(req, res) {
   prc.on('close', function(code) {
     res.attachment(fileName + '.txt');
     res.send(content);
+    app.io.sockets.emit('notification', 'hcalc exited with `' + code + '`. errors: ' + err);
   });
 });
 

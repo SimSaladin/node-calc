@@ -58,4 +58,7 @@ Time | Activity
 1540 - 1650 | Cleaning up all the mess and working getting ready for deployment.  Deployed socket.io (without hcalc backend)
 1640 - 1740 | heroku+grunt+bower larc.,uant,.uhlc (it just won't work)             
 1800 - 1930 | switched to more sane buildpack. cleaned up JS with jshint.  wrestling with karma+angular (tests framework now operational)
-2000 -      | Writing some karma unit tests (after finally getting that thing to work...)
+2000 - 2100 | Writing some karma unit tests (after finally getting that thing to work...) Finally hacked together in [heroku](http://node-calc.herokuapp.com)
+2200 - 2300 | Heroku installation tuning (hcalc binary)
+
+~5h

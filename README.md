@@ -5,6 +5,8 @@ node-calc
 [hcalc](https://github.com/SimSaladin/hcalc). Horribly inefficient and the app
 is most likely full of holes as this is just hacked together.
 
+Find it on heroku: http://node-calc.herokuapp.com
+
 Why I wrote this? I decided to try doing things the mainstream way. In javascript 
 and a bunch of its popular libraries I hear about everywhere. The result?
 Nights of frustration, stupid bugs and (imho) bad library designs (For
@@ -98,8 +100,11 @@ The second command starts your browser in http://localhost:9000.
 Now, **please** do not run this on a production server without proper
 sandboxing or someone **will** launch the missiles!
 
-There are Procfiles for deploying to heroku in `node-calc-{server,web}` for the
-backend and web interface, respectively.
+There is Procfile for deploying to heroku in `node-calc-server`.
+
+For the web interface, just `grunt` it and publish (relevant parts from) `/dist`
+as static site. Note that the ng-file-upload, jquery-csv and socket.io-client
+bower modules (and bower) suck, so they are hard-coded to index.html.
 
 Development notes
 -----------------

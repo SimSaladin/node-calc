@@ -43,21 +43,27 @@
     <script src="bower_components/json3/lib/json3.min.js"></script>
     <![endif]-->
 
-    <!-- XXX: how  is this supposed to be injected automatically via bower? -->
-    <script src="bower_components/socket.io-client/dist/socket.io.js"></script>
+    <!-- NOTE bower is stupid and won't include this by itself -->
+    <script src="bower_components/socket.io-client/dist/socket.io.min.js"></script>
+
+
+    <script src="bower_components/ng-file-upload/angular-file-upload-shim.min.js"></script>
 
     <!-- build:js scripts/vendor.js -->
     <!-- bower:js -->
     <script src="bower_components/jquery/jquery.js"></script>
     <script src="bower_components/angular/angular.js"></script>
     <script src="bower_components/sass-bootstrap/dist/js/bootstrap.js"></script>
-    <script src="bower_components/angular-file-upload/angular-file-upload.js"></script>
     <script src="bower_components/angular-resource/angular-resource.js"></script>
     <script src="bower_components/angular-route/angular-route.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
+    <!-- NOTE bower is stupid and won't include this by itself -->
     <script src="bower_components/jquery-csv/src/jquery.csv.js"></script>
+
+    <!-- NOTE this cannot be loaded by bower (and therfore not included in
+    bower.json deps: shim part needs to be before angular -->
     <script src="bower_components/ng-file-upload/angular-file-upload.min.js"></script>
 
         <!-- build:js({.tmp,app}) scripts/scripts.js -->
